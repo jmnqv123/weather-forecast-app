@@ -1,0 +1,33 @@
+import requests
+import json
+
+def get_weather(location):
+  # Replace YOUR_API_KEY with your actual API key
+  api_key = "YOUR_API_KEY"
+
+  # Send a request to the OpenWeatherMap API to get the current weather conditions for the specified location
+  response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}")
+
+  # If the request was successful (status code 200), parse the JSON response
+  if response.status_code == 200:
+    data = json.loads(response.text)
+
+    # Get the current temperature, humidity, and wind speed from the JSON response
+    temperature = data["main"]["temp"]
+    humidity = data["main"]["humidity"]
+    wind_speed = data["wind"]["speed"]
+
+    # Convert the temperature from kelvin to fahrenheit
+    temperature = (temperature - 273.15) * 9/5 + 32
+
+    # Print the current weather conditions
+    print(f"Current weather for {location}:")
+    print(f"Temperature: {temperature:.1f}°F")
+    print(f"Humidity: {humidity}%")
+    print(f"Wind speed: {wind_speed} mph")
+  else:
+    # If the request was not successful, print an error message
+    print(f"Error getting weather for {location}: status code {response.status_code}")
+
+# Test the function by getting the weather for New York, NY
+get_weather("New York, NY")
